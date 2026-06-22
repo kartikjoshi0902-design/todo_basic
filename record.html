@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<head><script>
+    const el =  document.getElementById("todos");
+    let cnt =0 ;
+    let arr = [];
+    window.onload = function(){
+        let tool  = localStorage.getItem("list");
+        if(tool)
+    {
+        let task = JSON.parse(tool);
+        for(let i =0 ;i < task.length ; i++)
+    {
+        add(task[i]);
+    }
+    }
+    }
+    function add(elem)
+    {   let e = document.createElement("div");
+        e.id = "todos"+cnt.toString() ;
+        let i ;
+        if(!elem)
+            {
+                i = document.querySelector("#common_input").value;
+                document.querySelector("#common_input").value = "";
+            }
+        else 
+            i = elem;
+        
+       
+        let del = document.createElement("button");
+        let upd = document.createElement("button");
+        let inp = document.createElement("input");
+        let y= document.createElement("div");
+        y.id = "todo"+cnt.toString();
+        y.innerHTML = i ;
+        inp.placeholder = "update";
+        del.onclick = ()=>deleteFunc(cnt) ;
+        del.innerHTML = "DELETE"
+        upd.innerHTML = "UPDATE"
+        upd.onclick = ()=>update(cnt) ;
+        e.appendChild(del);
+        e.appendChild(upd);
+        e.appendChild(inp);
+        e.append(y);
+        arr.push(
+            e
+        );
+        storeit();
+        render();
+        cnt++;
+    }
+    function deleteFunc(id)
+    {
+        let v = "#todos"+id.toString();
+        let eleme = document.querySelector(v);
+       for(let i =0 ;i < arr.length ;i++)
+       {
+        if(eleme==arr[i])
+            {arr.splice(i,1);break;}
+       }
+       storeit();
+        render();
+    }
+    function update(id)
+    {
+        let v = "#todos"+id.toString();
+        let eleme = document.querySelector(v);
+        if(eleme)
+            {
+                let i = eleme.querySelector("input").value ;
+                let y = eleme.querySelector("div");
+                y.innerHTML = i ;
+                eleme.querySelector("input").value = "";
+            }
+        else 
+            console.log("Not found");
+        storeit();
+        render() ;
+    }
+    function render()
+    {
+        let y = document.querySelector("#todos");
+        y.innerHTML = "";
+        for(let i = 0; i< arr.length ; i++)
+    {
+        y.appendChild(arr[i]);
+    }
+    }
+    function logout() {
+    // 1. LocalStorage se token aur status dono ko uda do
+    localStorage.removeItem("token");
+    localStorage.removeItem("present");
+    
+    // 2. User ko wapas login page par bhej do
+    window.location.replace('/login');
+}
+function storeit()
+{   let cleanTextArray = arr.map(item => item.querySelector("div").innerHTML);
+    localStorage.setItem("list",JSON.stringify(cleanTextArray));
+}
+</script>
+</head>
+<body>
+    <button onclick="logout()">Logout</button>
+    <div><input type = "text" placehoder ="enter" id="common_input"></div>
+    <div><button onclick = "add()">Enter</button></div>
+    <div id="todos"></div>
+</body>
+</html>

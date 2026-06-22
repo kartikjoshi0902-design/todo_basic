@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
+   
+    <script>
+        async function get()
+        {
+            const doc = document.querySelectorAll("div");
+            let user = doc[1].querySelector("input").value;
+            let pass = doc[3].querySelector("input").value;
+            let val = await axios.post('/new_member',{
+                username : user , 
+                password:pass 
+            });
+            localStorage.setItem("token", val.data.tok);
+            localStorage.setItem("present","1");
+            window.location.replace('/');
+        }
+    </script>
+</head>
+<body>
+    <div>Username : </div>
+    <div><input type = "text" placeholder = "username"></div>
+    <div>Password : </div>
+    <div><input type = "password" placeholder = "username" ></div>
+    <div><button onclick = get()>Submit</button></div>
+</body>
+</html>

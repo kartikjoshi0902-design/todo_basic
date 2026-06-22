@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
+   
+    <script>
+        async function get()
+        {   
+            const doc = document.querySelectorAll("div");
+            let user = doc[1].querySelector("input").value;
+            let pass = doc[3].querySelector("input").value;
+            let el = document.createElement("div");
+            el.id = "1";
+            el.innerHTML = "";
+            let val = await axios.post('/find',{
+                username : user , 
+                password:pass 
+            });
+            if(val.data.msg=="1")
+            {localStorage.setItem("token", val.data.tok);
+            localStorage.setItem("present","1");
+            let e = document.getElementById("1");
+            if(e)
+            {e.innerHTML = "";e.remove();}
+            window.location.replace('/');
+
+        }
+            else 
+            {
+                let e = document.getElementById("1");
+            if(e==null)
+            {
+                el.innerHTML = "WRONG CREDENTIALS" ;
+                document.querySelector("body").appendChild(el);
+            }
+            else 
+            {
+                e.innerHTML = "WRONG CREDENTIALS";
+              
+            }
+            
+            }
+        }
+        function logout() {
+    // 1. LocalStorage se token aur status dono ko uda do
+    localStorage.removeItem("token");
+    localStorage.removeItem("present");
+    
+    // 2. User ko wapas login page par bhej do
+    window.location.replace('/login');
+}
+    </script>
+</head>
+<body>
+    <button onclick="logout()">Logout</button>
+    <div>Username : </div>
+    <div><input type = "text" placeholder = "username"></div>
+    <div>Password : </div>
+    <div><input type = "password" placeholder = "username" ></div>
+    <div><button onclick = get()>Submit</button></div>
+</body>
+</html>
